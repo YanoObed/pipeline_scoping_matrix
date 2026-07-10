@@ -1,0 +1,364 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<style>
+:root{
+    --red:#E73846;
+    --blue:#467C9E;
+    --orange:#F26522;
+    --navy:#1C3557;
+    --aqua:#A9D8DC;
+    --cream:#EAE4DC;
+    --light-blue:#C9D7E4;
+    --grey:#909A9B;
+    --white:#FFFFFF;
+}
+
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    background:#f5f7f9;
+    color:var(--navy);
+    font-family:Arial, sans-serif;
+}
+
+/* Header */
+.dashboard-header{
+    background:var(--navy);
+    color:var(--white);
+    padding:18px 25px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    border-bottom:5px solid var(--orange);
+}
+
+.dashboard-header h1{
+    margin:0;
+    font-size:24px;
+}
+
+.dashboard-header span{
+    color:var(--aqua);
+    font-size:14px;
+}
+
+/* Main content */
+.dashboard-container{
+    padding:25px;
+    min-height:70vh;
+}
+
+.page-title{
+    color:var(--navy);
+    margin:0 0 20px;
+}
+
+.form-card{
+    background:var(--white);
+    padding:30px;
+    border-radius:10px;
+    border-top:5px solid var(--blue);
+    box-shadow:0 2px 8px rgba(28,53,87,.10);
+    max-width:1000px;
+    margin:0 auto;
+}
+
+.form-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:18px;
+}
+
+.form-group{
+    display:flex;
+    flex-direction:column;
+}
+
+label{
+    font-weight:bold;
+    margin-bottom:7px;
+    color:var(--navy);
+    font-size:14px;
+}
+
+input,
+select,
+textarea{
+    width:100%;
+    padding:12px;
+    border:1px solid var(--light-blue);
+    border-radius:8px;
+    background:var(--white);
+    color:var(--navy);
+    font-size:14px;
+    font-family:Arial, sans-serif;
+    outline:none;
+    transition:border-color .2s, box-shadow .2s;
+}
+
+input:focus,
+select:focus,
+textarea:focus{
+    border-color:var(--blue);
+    box-shadow:0 0 0 3px rgba(70,124,158,.18);
+}
+
+textarea{
+    min-height:100px;
+    resize:vertical;
+}
+
+.full-width{
+    grid-column:1 / -1;
+}
+
+.submit-btn{
+    width:100%;
+    background:var(--orange);
+    color:var(--white);
+    border:none;
+    padding:14px 20px;
+    border-radius:8px;
+    cursor:pointer;
+    font-size:16px;
+    font-weight:bold;
+    transition:background .2s, transform .2s;
+}
+
+.submit-btn:hover{
+    background:var(--red);
+    transform:translateY(-1px);
+}
+
+/* Footer */
+.dashboard-footer{
+    background:var(--navy);
+    color:var(--white);
+    padding:16px;
+    text-align:center;
+    border-top:5px solid var(--blue);
+    margin-top:30px;
+    font-size:13px;
+}
+
+@media(max-width:700px){
+    .dashboard-header{
+        flex-direction:column;
+        align-items:flex-start;
+        gap:6px;
+    }
+
+    .dashboard-container{
+        padding:15px;
+    }
+
+    .form-card{
+        padding:20px;
+    }
+
+    .form-grid{
+        grid-template-columns:1fr;
+    }
+
+    .full-width{
+        grid-column:1;
+    }
+}
+</style>
+
+<header class="dashboard-header">
+    <h1>Pipeline Scoping Matrix</h1>
+    <span>Add New Opportunity</span>
+</header>
+
+<main class="dashboard-container">
+
+    <h1 class="page-title">Add New Opportunity</h1>
+
+    <section class="form-card">
+
+        <form method="POST">
+
+            {% csrf_token %}
+
+            <div class="form-grid">
+
+                <div class="form-group">
+                    <label for="id">ID</label>
+                    <input
+                        type="text"
+                        id="id"
+                        name="id"
+                        required>
+                </div>
+
+                <div class="form-group">
+                    <label for="opportunity">
+                        Opportunity Name
+                    </label>
+                    <input
+                        type="text"
+                        id="opportunity"
+                        name="opportunity"
+                        required>
+                </div>
+
+                <div class="form-group">
+                    <label for="country">Country</label>
+                    <input
+                        type="text"
+                        id="country"
+                        name="country">
+                </div>
+
+                <div class="form-group">
+                    <label for="donor">Donor</label>
+                    <input
+                        type="text"
+                        id="donor"
+                        name="donor">
+                </div>
+
+                <div class="form-group">
+                    <label for="technical_area">
+                        Technical Area
+                    </label>
+                    <input
+                        type="text"
+                        id="technical_area"
+                        name="technical_area">
+                </div>
+
+                <div class="form-group">
+                    <label for="stage">Stage</label>
+                    <input
+                        type="text"
+                        id="stage"
+                        name="stage">
+                </div>
+
+                <div class="form-group">
+                    <label for="min_value">
+                        Min Value (USD)
+                    </label>
+                    <input
+                        type="number"
+                        id="min_value"
+                        name="min_value"
+                        min="0"
+                        step="0.01">
+                </div>
+
+                <div class="form-group">
+                    <label for="max_value">
+                        Max Value (USD)
+                    </label>
+                    <input
+                        type="number"
+                        id="max_value"
+                        name="max_value"
+                        min="0"
+                        step="0.01">
+                </div>
+
+                <div class="form-group">
+                    <label for="weighted_value">
+                        Weighted Value (USD)
+                    </label>
+                    <input
+                        type="number"
+                        id="weighted_value"
+                        name="weighted_value"
+                        min="0"
+                        step="0.01">
+                </div>
+
+                <div class="form-group">
+                    <label for="owner">Owner</label>
+                    <input
+                        type="text"
+                        id="owner"
+                        name="owner">
+                </div>
+
+                <div class="form-group">
+                    <label for="action_due">
+                        Action Due Date
+                    </label>
+                    <input
+                        type="date"
+                        id="action_due"
+                        name="action_due">
+                </div>
+
+                <div class="form-group">
+                    <label for="deadline">Deadline</label>
+                    <input
+                        type="date"
+                        id="deadline"
+                        name="deadline">
+                </div>
+
+                <div class="form-group">
+                    <label for="days">
+                        Days to Deadline
+                    </label>
+                    <input
+                        type="number"
+                        id="days"
+                        name="days"
+                        min="0">
+                </div>
+
+                <div class="form-group full-width">
+                    <label for="next_action">
+                        Next Action
+                    </label>
+                    <textarea
+                        id="next_action"
+                        name="next_action"></textarea>
+                </div>
+
+                <div class="form-group full-width">
+                    <label for="partners">Partners</label>
+                    <textarea
+                        id="partners"
+                        name="partners"></textarea>
+                </div>
+
+                <div class="form-group full-width">
+                    <label for="risks">
+                        Risks / Blockers
+                    </label>
+                    <textarea
+                        id="risks"
+                        name="risks"></textarea>
+                </div>
+
+                <div class="form-group full-width">
+                    <button
+                        type="submit"
+                        class="submit-btn">
+                        Save Opportunity
+                    </button>
+                </div>
+
+            </div>
+
+        </form>
+
+    </section>
+
+</main>
+
+<footer class="dashboard-footer">
+    &copy; {% now "Y" %} Pipeline Scoping Matrix |
+    All rights reserved
+</footer>
+
+{% endblock %}

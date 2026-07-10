@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Pipeline Scoping Matrix</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+
+        body{
+            margin:0;
+            font-family:Arial, sans-serif;
+            background:#eef2f7;
+            display:flex;
+        }
+
+        /* =========================
+           SIDEBAR NAVIGATION
+        ========================= */
+        .sidebar{
+            width:260px;
+            min-height:100vh;
+            background:linear-gradient(180deg,#1f3b57,#2d6cdf);
+            box-shadow:4px 0 12px rgba(0,0,0,0.1);
+            position:fixed;
+            left:0;
+            top:0;
+        }
+
+        .logo{
+            color:white;
+            font-size:22px;
+            font-weight:bold;
+            padding:25px;
+            text-align:center;
+            border-bottom:1px solid rgba(255,255,255,0.2);
+        }
+
+        .nav-links{
+            display:flex;
+            flex-direction:column;
+            padding:15px;
+            gap:8px;
+        }
+
+        .nav-links a{
+            color:white;
+            text-decoration:none;
+            padding:14px 18px;
+            border-radius:10px;
+            font-weight:bold;
+            transition:0.3s;
+        }
+
+        .nav-links a:hover{
+            background:rgba(255,255,255,0.15);
+        }
+
+        /* =========================
+           PAGE CONTENT AREA
+        ========================= */
+        .container{
+            margin-left:260px;
+            padding:25px;
+            width:calc(100% - 260px);
+        }
+
+        /* =========================
+           GLOBAL CARD STYLE
+        ========================= */
+        .card{
+            background:white;
+            border-radius:14px;
+            box-shadow:0 6px 18px rgba(0,0,0,0.08);
+            padding:15px;
+        }
+
+        /* =========================
+           TABLE STYLE
+        ========================= */
+        table{
+            width:100%;
+            border-collapse:collapse;
+            min-width:900px;
+        }
+
+        th{
+            background:#1f3b57;
+            color:white;
+            padding:12px;
+            text-align:left;
+            font-size:13px;
+        }
+
+        td{
+            padding:10px;
+            border-bottom:1px solid #eee;
+            font-size:13px;
+        }
+
+        tr:hover{
+            background:#f5f7fa;
+        }
+
+        /* =========================
+           URGENT ROW
+        ========================= */
+        .urgent{
+            background:#ffe6e6;
+        }
+
+        /* =========================
+           BUTTONS
+        ========================= */
+        .btn{
+            background:#1f3b57;
+            color:white;
+            padding:10px 14px;
+            border:none;
+            border-radius:8px;
+            cursor:pointer;
+            font-weight:bold;
+        }
+
+        .btn:hover{
+            background:#2d6cdf;
+        }
+
+        /* =========================
+           RESPONSIVE
+        ========================= */
+        @media(max-width:900px){
+            .sidebar{
+                position:relative;
+                width:100%;
+                height:auto;
+            }
+
+            .container{
+                margin-left:0;
+                width:100%;
+            }
+
+            .nav-links{
+                flex-direction:row;
+                flex-wrap:wrap;
+                justify-content:center;
+            }
+        }
+
+    </style>
+</head>
+
+<body>
+
+<!-- ================= SIDEBAR ================= -->
+<div class="sidebar">
+
+    <div class="logo">
+        📊 Pipeline Matrix
+    </div>
+
+    <div class="nav-links">
+
+        <a href="{% url 'dashboard' %}">📊 Dashboard</a>
+        <a href="{% url 'pipeline' %}">📋 Full Pipeline</a>
+        <a href="{% url 'urgent' %}">🔥 Urgent</a>
+        <a href="{% url 'add_pipeline' %}">➕ Add Opportunity</a>
+        <a href="{% url 'logout' %}">🚪 Logout</a>
+
+    </div>
+
+</div>
+
+<!-- ================= MAIN CONTENT ================= -->
+<div class="container">
+
+    {% block content %}
+    {% endblock %}
+
+</div>
+
+</body>
+</html>

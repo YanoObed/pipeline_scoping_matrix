@@ -1,0 +1,265 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<style>
+:root{
+    --red:#E73846;
+    --blue:#467C9E;
+    --orange:#F26522;
+    --navy:#1C3557;
+    --aqua:#A9D8DC;
+    --cream:#EAE4DC;
+    --light-blue:#C9D7E4;
+    --grey:#909A9B;
+    --white:#FFFFFF;
+}
+
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    background:#f5f7f9;
+    color:var(--navy);
+    font-family:Arial, sans-serif;
+}
+
+.dashboard-header{
+    background:var(--navy);
+    color:var(--white);
+    padding:18px 25px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    border-bottom:5px solid var(--orange);
+}
+
+.dashboard-header h1{
+    margin:0;
+    font-size:24px;
+}
+
+.dashboard-header span{
+    color:var(--aqua);
+    font-size:14px;
+}
+
+.dashboard-container{
+    padding:25px;
+}
+
+.stats{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:15px;
+    margin-bottom:25px;
+}
+
+.card{
+    padding:20px;
+    border-radius:10px;
+    color:var(--white);
+    box-shadow:0 2px 8px rgba(28,53,87,.10);
+}
+
+.card h3,
+.card h2{
+    margin:5px 0;
+}
+
+.navy{background:var(--navy);}
+.blue{background:var(--blue);}
+.orange{background:var(--orange);}
+.red{background:var(--red);}
+
+.table-card{
+    background:var(--white);
+    padding:20px;
+    border-radius:10px;
+    box-shadow:0 2px 8px rgba(28,53,87,.10);
+}
+
+.table-card h2{
+    margin-top:0;
+}
+
+.table-container{
+    overflow-x:auto;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+th,
+td{
+    padding:12px;
+    text-align:left;
+    border-bottom:1px solid var(--cream);
+}
+
+th{
+    background:var(--navy);
+    color:var(--white);
+}
+
+tbody tr:hover{
+    background:var(--light-blue);
+}
+
+.tag{
+    display:inline-block;
+    padding:6px 12px;
+    border-radius:20px;
+    color:var(--white);
+    font-size:12px;
+    font-weight:bold;
+}
+
+.kenya{
+    background:var(--blue);
+}
+
+.tanzania{
+    background:var(--orange);
+}
+
+.delete-btn{
+    color:var(--red);
+    font-weight:bold;
+    text-decoration:none;
+}
+
+.delete-btn:hover{
+    color:var(--navy);
+}
+
+.dashboard-footer{
+    background:var(--navy);
+    color:var(--white);
+    padding:16px;
+    text-align:center;
+    border-top:5px solid var(--blue);
+    margin-top:30px;
+    font-size:13px;
+}
+
+@media(max-width:900px){
+    .stats{
+        grid-template-columns:repeat(2,1fr);
+    }
+}
+
+@media(max-width:600px){
+    .stats{
+        grid-template-columns:1fr;
+    }
+
+    .dashboard-header{
+        flex-direction:column;
+        align-items:flex-start;
+        gap:6px;
+    }
+}
+</style>
+
+<header class="dashboard-header">
+    <h1>Pipeline Scoping Matrix</h1>
+    <span>Full Pipeline Data</span>
+</header>
+
+<main class="dashboard-container">
+
+    <section class="stats">
+
+        <div class="card navy">
+            <h3>Total Opportunities</h3>
+            <h2>{{ total_opps }}</h2>
+        </div>
+
+        <div class="card blue">
+            <h3>Total Pipeline Value</h3>
+            <h2>${{ total_value }}</h2>
+        </div>
+
+        <div class="card orange">
+            <h3>Weighted Value</h3>
+            <h2>${{ weighted_value }}</h2>
+        </div>
+
+        <div class="card red">
+            <h3>Urgent Opportunities</h3>
+            <h2>{{ urgent|length }}</h2>
+        </div>
+
+    </section>
+
+    <section class="table-card">
+
+        <h2>Full Pipeline Data</h2>
+
+        <div class="table-container">
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Opportunity</th>
+                        <th>Country</th>
+                        <th>Stage</th>
+                        <th>Owner</th>
+                        <th>Max Value</th>
+                        <th>Weighted</th>
+                        <th>Days</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for row in pipeline %}
+                    <tr>
+                        <td>{{ row.id }}</td>
+                        <td>{{ row.opportunity }}</td>
+
+                        <td>
+                            <span class="tag {{ row.country|lower }}">
+                                {{ row.country }}
+                            </span>
+                        </td>
+
+                        <td>{{ row.stage }}</td>
+                        <td>{{ row.owner }}</td>
+                        <td>${{ row.max_value }}</td>
+                        <td>${{ row.weighted_value }}</td>
+                        <td>{{ row.days }}</td>
+
+                        <td>
+                            <a
+                                href="/delete/{{ row.row_number }}/"
+                                class="delete-btn">
+                                Delete
+                            </a>
+                        </td>
+                    </tr>
+
+                    {% empty %}
+                    <tr>
+                        <td colspan="9">No opportunities found.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+        </div>
+    </section>
+
+</main>
+
+<footer class="dashboard-footer">
+    &copy; {% now "Y" %} Pipeline Scoping Matrix | All rights reserved
+</footer>
+
+{% endblock %}

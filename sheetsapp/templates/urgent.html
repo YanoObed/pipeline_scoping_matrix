@@ -1,0 +1,229 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<style>
+:root{
+    --red:#E73846;
+    --blue:#467C9E;
+    --orange:#F26522;
+    --navy:#1C3557;
+    --aqua:#A9D8DC;
+    --cream:#EAE4DC;
+    --light-blue:#C9D7E4;
+    --grey:#909A9B;
+    --white:#FFFFFF;
+}
+
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    background:#f5f7f9;
+    color:var(--navy);
+    font-family:Arial, sans-serif;
+}
+
+.dashboard-header{
+    background:var(--navy);
+    color:var(--white);
+    padding:18px 25px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    border-bottom:5px solid var(--orange);
+}
+
+.dashboard-header h1{
+    margin:0;
+    font-size:24px;
+}
+
+.dashboard-header span{
+    color:var(--aqua);
+    font-size:14px;
+}
+
+.dashboard-container{
+    padding:25px;
+    min-height:65vh;
+}
+
+.summary-card{
+    background:var(--red);
+    color:var(--white);
+    padding:20px;
+    border-radius:10px;
+    margin-bottom:25px;
+    box-shadow:0 2px 8px rgba(28,53,87,.10);
+}
+
+.summary-card h3,
+.summary-card h2,
+.summary-card p{
+    margin:5px 0;
+}
+
+.summary-card h2{
+    font-size:32px;
+}
+
+.table-card{
+    background:var(--white);
+    padding:20px;
+    border-radius:10px;
+    box-shadow:0 2px 8px rgba(28,53,87,.10);
+}
+
+.table-card h2{
+    margin-top:0;
+}
+
+.table-container{
+    overflow-x:auto;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+th,
+td{
+    padding:12px;
+    text-align:left;
+    border-bottom:1px solid var(--cream);
+}
+
+th{
+    background:var(--navy);
+    color:var(--white);
+}
+
+tbody tr:hover{
+    background:var(--light-blue);
+}
+
+.urgent-row{
+    border-left:4px solid var(--red);
+}
+
+.days-badge{
+    display:inline-block;
+    background:var(--red);
+    color:var(--white);
+    padding:6px 12px;
+    border-radius:20px;
+    font-size:12px;
+    font-weight:bold;
+    min-width:45px;
+    text-align:center;
+}
+
+.empty-message{
+    text-align:center;
+    color:var(--grey);
+    padding:25px;
+}
+
+.dashboard-footer{
+    background:var(--navy);
+    color:var(--white);
+    padding:16px;
+    text-align:center;
+    border-top:5px solid var(--blue);
+    margin-top:30px;
+    font-size:13px;
+}
+
+@media(max-width:600px){
+    .dashboard-header{
+        flex-direction:column;
+        align-items:flex-start;
+        gap:6px;
+    }
+
+    .dashboard-container{
+        padding:15px;
+    }
+
+    .summary-card,
+    .table-card{
+        padding:15px;
+    }
+
+    th,
+    td{
+        white-space:nowrap;
+    }
+}
+</style>
+
+<header class="dashboard-header">
+    <h1>Pipeline Scoping Matrix</h1>
+    <span>Urgent Opportunities</span>
+</header>
+
+<main class="dashboard-container">
+
+    <section class="summary-card">
+        <h3>Total Urgent Opportunities</h3>
+        <h2>{{ urgent|length }}</h2>
+        <p>Opportunities with 14 days or fewer remaining.</p>
+    </section>
+
+    <section class="table-card">
+
+        <h2>Urgent Opportunities</h2>
+
+        <div class="table-container">
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Opportunity</th>
+                        <th>Owner</th>
+                        <th>Stage</th>
+                        <th>Days Remaining</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for row in urgent %}
+
+                    <tr class="urgent-row">
+                        <td>{{ row.opportunity }}</td>
+                        <td>{{ row.owner }}</td>
+                        <td>{{ row.stage }}</td>
+                        <td>
+                            <span class="days-badge">
+                                {{ row.days }}
+                            </span>
+                        </td>
+                    </tr>
+
+                    {% empty %}
+
+                    <tr>
+                        <td colspan="4" class="empty-message">
+                            No urgent opportunities at the moment.
+                        </td>
+                    </tr>
+
+                    {% endfor %}
+                </tbody>
+            </table>
+
+        </div>
+
+    </section>
+
+</main>
+
+<footer class="dashboard-footer">
+    &copy; {% now "Y" %} Pipeline Scoping Matrix | All rights reserved
+</footer>
+
+{% endblock %}
